@@ -4,6 +4,8 @@ import com.example.Task.tracking.system.Entity.Task;
 import com.example.Task.tracking.system.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service  // it helps to determine this class is service class
 // this annotaion hepls to manage  and create the object
 public class Taskservice {
@@ -14,7 +16,13 @@ public class Taskservice {
 
     // creating methode for task
     public Task createTask(Task task ){
-    return  taskRepository.save(task);// task object come from Controller
+          return  taskRepository.save(task);// task object come from Controller
+    }
+
+
+    // creting methode for get the task
+    public List<Task>  GetTask(Task task){
+        return taskRepository.findAll();// findall methdoe  is present in jpa repo
     }
 
 }
