@@ -2,9 +2,11 @@ package com.example.Task.tracking.system.conteroller;
 
 import com.example.Task.tracking.system.Entity.Task;
 import com.example.Task.tracking.system.Service.Taskservice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 // reastcontroller are use to help class to handle rest request
 @RestController
@@ -33,4 +35,19 @@ public class Taskcontroller {
         return taskservice.GetTask(task);
     }
 
+
+    // get task by id
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getbyid(@PathVariable int id){
+        Optional<Task> result = taskservice.getbyid(id);
+         if(result.isPresent()){
+             Task task=result.get();
+             return ResponseEntity.ok(task);
+         }
+         else {
+             return ResponseEntity.notFound().build();
+
+         }
+
+    }
 }
