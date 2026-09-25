@@ -34,5 +34,14 @@ public class Task {
 
     // taking task title
 
+    public String getStatus() {
+        return status;
+    }
 
+    public void setStatus(String status) {
+        status = status;
+    }
+
+    // task status
+    private String status;
 }

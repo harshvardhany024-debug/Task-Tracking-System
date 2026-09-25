@@ -5,6 +5,7 @@ import com.example.Task.tracking.system.repository.TaskRepository;
 
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,24 @@ public class Taskservice {
     public Optional<Task> getbyid(int id) {
        return taskRepository.findById(id);
 
+    }
+    public  Task updatetask(int id , Task task){
+        Optional<Task> result=taskRepository.findById(id); // checking the id is existing or not
+        if(result.isPresent()){
+            Task exitingTask = result.get();
 
+        exitingTask.setTasktitle (task.getTasktitle());
+        exitingTask.setStatus(task.getStatus());
+   return taskRepository.save(exitingTask) ;    }
+  return null ;  }
+
+    // methoide for delet by id
+
+    public void Deletebyid(int id){
+        Optional<Task> result= taskRepository.findById(id);
+        if(result.isPresent()){
+            taskRepository.deleteById(id);
+        }
     }
 }
 
