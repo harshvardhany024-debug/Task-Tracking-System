@@ -7,8 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TaskTrackingSystemApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(TaskTrackingSystemApplication.class, args);
+		System.out.println("APPLICATION IS STARTED");
 	}
 
+
 }
-git

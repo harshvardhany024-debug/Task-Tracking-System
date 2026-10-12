@@ -1,55 +1,78 @@
 package com.example.Task.tracking.system.Service;
 
+import com.example.Task.tracking.system.Dto.TaskcreateDto;
+import com.example.Task.tracking.system.Dto.TaskresponseDto;
 import com.example.Task.tracking.system.Entity.Task;
+import com.example.Task.tracking.system.exception.TaskNotFaundException;
 import com.example.Task.tracking.system.repository.TaskRepository;
-
 import org.springframework.stereotype.Service;
 
-import java.security.PublicKey;
 import java.util.List;
 import java.util.Optional;
 
-@Service  // it helps to determine this class is service class
-// this annotaion hepls to manage  and create the object
+@Service
 public class Taskservice {
-    private final TaskRepository taskRepository; // creating a refrence of task repo
-    public Taskservice(TaskRepository taskRepository){
-        this.taskRepository=taskRepository;
-    }// this is constructer injection
+    private final TaskRepository taskRepository;
 
-    // creating methode for task
-    public Task createTask(Task task ){
-          return  taskRepository.save(task);// task object come from Controller
+    public Taskservice(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    // create task
+
+    public TaskresponseDto createTask(TaskcreateDto dto) {
+        Task task = new Task();
+        task.setTasktitle(dto.getTasktitle());
+        task.setStatus(dto.getStatus());
+        Task saved = taskRepository.save(task);
+        return toResponse(saved);
     }
 
 
-    // creting methode for get the task
-    public List<Task>  GetTask(Task task){
-        return taskRepository.findAll();// findall methdoe  is present in jpa repo
 
+    // get task
+
+    public List<TaskresponseDto> GetTask() {
+        return taskRepository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    public Optional<Task> getbyid(int id) {
-       return taskRepository.findById(id);
 
+    // get task by id
+    public TaskresponseDto getbyid(int id) {
+
+        return taskRepository.findById(id).map(this::toResponse).orElseThrow(()->new TaskNotFaundException("Task not faund id is "+id));
     }
-    public  Task updatetask(int id , Task task){
-        Optional<Task> result=taskRepository.findById(id); // checking the id is existing or not
-        if(result.isPresent()){
-            Task exitingTask = result.get();
 
-        exitingTask.setTasktitle (task.getTasktitle());
-        exitingTask.setStatus(task.getStatus());
-   return taskRepository.save(exitingTask) ;    }
-  return null ;  }
+    // update by id
+    public TaskresponseDto updatetask(int id, TaskcreateDto dto) {
+        Optional<Task> result = taskRepository.findById(id);
+        if (result.isPresent()) {
+            Task existingTask = result.get();
+            existingTask.setTasktitle(dto.getTasktitle());
+            existingTask.setStatus(dto.getStatus());
+            return toResponse(taskRepository.save(existingTask));
+        }
+        throw  new TaskNotFaundException("Task Not faund in this id  "+id);
+    }
 
-    // methoide for delet by id
 
-    public void Deletebyid(int id){
-        Optional<Task> result= taskRepository.findById(id);
-        if(result.isPresent()){
+    // delete task by id
+    public void Deletebyid(int id) {
+        Optional<Task> result = taskRepository.findById(id);
+        if (result.isPresent()) {
             taskRepository.deleteById(id);
         }
+        else{
+        throw new TaskNotFaundException("This id is not faund "+id);
+    }}
+
+    private TaskresponseDto toResponse(Task task) {
+        TaskresponseDto response = new TaskresponseDto();
+        response.setTaskid(task.getTaskid());
+        response.setTasktitle(task.getTasktitle());
+        response.setStatus(task.getStatus());
+        return response;
     }
 }
-

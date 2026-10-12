@@ -39,7 +39,7 @@ public class Task {
     }
 
     public void setStatus(String status) {
-        status = status;
+        this.status = status;
     }
 
     // task status
