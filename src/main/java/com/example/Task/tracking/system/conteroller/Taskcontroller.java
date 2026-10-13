@@ -3,6 +3,7 @@ package com.example.Task.tracking.system.conteroller;
 import com.example.Task.tracking.system.Dto.TaskcreateDto;
 import com.example.Task.tracking.system.Dto.TaskresponseDto;
 import com.example.Task.tracking.system.Service.Taskservice;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ public class Taskcontroller {
     }
 
     @PostMapping
-    public TaskresponseDto creattask(@RequestBody TaskcreateDto dto) {
+    public TaskresponseDto creattask(@Valid @RequestBody  TaskcreateDto dto) {
         return taskservice.createTask(dto);
     }
 
